@@ -1,12 +1,23 @@
 package com.santiagolandi.detalleproductoservice.dto;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 import java.time.LocalDate;
 
 public class DetalleProductoCreacionDTO {
+    @NotNull(message = "El id no puede ser nulo")
+    @Positive(message = "El id debe ser un numero positivo")
     private Long idProducto;
+    @NotNull(message = "La cantidad comprada no puede ser nula")
+    @Positive(message = "La cantidad comprada debe ser un numero positivo")
     private Integer cantidadComprada;
+    @NotNull(message = "El precio no puede ser nulo")
+    @Positive(message = "El precio debe ser un numero positivo")
     private Double precioUnitario;
+    @NotNull(message = "La alicuota de iva no puede ser nula, debe ser 0.0, 0.105 o 0.21 ")
     private Double alicuotaIva;
+    @NotNull(message = "La fecha de compra no puede ser nula")
     private LocalDate fechaCompra;
 
     public DetalleProductoCreacionDTO() {}

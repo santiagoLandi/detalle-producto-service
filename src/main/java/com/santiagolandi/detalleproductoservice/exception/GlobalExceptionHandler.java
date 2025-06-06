@@ -25,5 +25,19 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorMessage("Error al ingresar los datos", ex.getMessage()));
     }
+
+    // 👇 Manejo de excepcion ante falta de detalles de productos para mostar
+    @ExceptionHandler(SinDetalleException.class)
+    public ResponseEntity<ErrorMessage> sinDetalles(SinDetalleException ex) {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body(new ErrorMessage("No hay datos", ex.getMessage()));
+    }
+
+    // 👇 Manejo de excepcion ante falta de detalle ante el id suministrado para buscar
+    @ExceptionHandler(SinDetallePorIdException.class)
+    public ResponseEntity<ErrorMessage> sinDetalles(SinDetallePorIdException ex) {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body(new ErrorMessage("No hay datos", ex.getMessage()));
+    }
 }
     record ErrorMessage(String mensaje, String detalle) {}
