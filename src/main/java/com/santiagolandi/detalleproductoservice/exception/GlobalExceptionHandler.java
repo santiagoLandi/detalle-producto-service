@@ -35,7 +35,21 @@ public class GlobalExceptionHandler {
 
     // 👇 Manejo de excepcion ante falta de detalle ante el id suministrado para buscar
     @ExceptionHandler(SinDetallePorIdException.class)
-    public ResponseEntity<ErrorMessage> sinDetalles(SinDetallePorIdException ex) {
+    public ResponseEntity<ErrorMessage> sinDetallesParaId(SinDetallePorIdException ex) {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body(new ErrorMessage("No hay datos", ex.getMessage()));
+    }
+
+    // 👇 Manejo de excepcion ante falta de detalle ante el id suministrado para buscar y la fecha desde la cual se buscan las compras
+    @ExceptionHandler(SinComprasFechaProductoException.class)
+    public ResponseEntity<ErrorMessage> sinDetalles(SinComprasFechaProductoException ex) {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body(new ErrorMessage("No hay datos", ex.getMessage()));
+    }
+
+    // 👇 Manejo de excepcion ante falta de detalle de compras entre las fechas suministradas
+    @ExceptionHandler(SinDetallesEntreFechasException.class)
+    public ResponseEntity<ErrorMessage> sinDetallesEntreFechas(SinDetallesEntreFechasException ex) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .body(new ErrorMessage("No hay datos", ex.getMessage()));
     }

@@ -5,10 +5,12 @@ import com.santiagolandi.detalleproductoservice.dto.DetalleProductoDTO;
 import com.santiagolandi.detalleproductoservice.service.DetalleProductoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -50,6 +52,25 @@ public class DetalleProductoController {
         DetalleProductoDTO actualizado = detalleProductoService.modificarDetalleProducto(id,detalle);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(actualizado);
     }
+
+    @GetMapping()
+    public ResponseEntity<?>filtrar(@RequestParam Long idProducto, @RequestParam(required = false)
+                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha){
+        List<DetalleProductoDTO>detalles = detalleProductoService.filtrarPorProductoFecha(idProducto,fecha);
+        return ResponseEntity.ok(detalles);
+    }
+
+    @GetMapping()
+    public ResponseEntity<?>listarDetalleProductosEntreFechas(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha1, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha2){
+        List<DetalleProductoDTO>detalles = detalleProductoService.filtrarEntreFechas(fecha1,fecha2);
+        return ResponseEntity.ok(detalles);
+    }
+
+    
+
+
+
+
 
 
 

@@ -7,12 +7,15 @@ import com.santiagolandi.detalleproductoservice.entity.DetalleProducto;
 import com.santiagolandi.detalleproductoservice.exception.AlicuotaIvaNoValidaException;
 import com.santiagolandi.detalleproductoservice.exception.SinDetalleException;
 import com.santiagolandi.detalleproductoservice.exception.SinDetallePorIdException;
+import com.santiagolandi.detalleproductoservice.exception.SinDetallesEntreFechasException;
 import com.santiagolandi.detalleproductoservice.feign.ProductoClient;
 import com.santiagolandi.detalleproductoservice.mapper.DetalleProductoMapper;
 import com.santiagolandi.detalleproductoservice.repository.DetalleProductoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -89,5 +92,25 @@ public class DetalleProductoService {
         return detalleProductoMapper.toDetalleProductoDTO(buscado);
     }
 
+    public List<DetalleProductoDTO>filtrarPorProductoFecha(Long idProducto, LocalDate fecha){
+        List<DetalleProducto>detalleProductos = new ArrayList<>();
+        if(fecha == null){
+            detalleProductos = detalleProductoRepository.filtrarPorProducto(idProducto);
+        }else{
+            detalleProductos = detalleProductoRepository.filtrarPorProductoFecha(idProducto,fecha);
+        }
+        if(detalleProductos.isEmpty()){
+            throw new SinDetallePorIdException(idProducto);
+        }
+        return detalleProductos.stream().map(detalleProductoMapper::toDetalleProductoDTO).collect(Collectors.toList());
+    }
+
+    public List<DetalleProductoDTO>filtrarEntreFechas(LocalDate fecha1, LocalDate fecha2){
+        List<DetalleProducto>detalleProductos = detalleProductoRepository.findByFechaCompraBetween(fecha1,fecha2);
+        if(detalleProductos.isEmpty()){
+            throw new SinDetallesEntreFechasException(fecha1,fecha2);
+        }
+        return detalleProductos.stream().map(detalleProductoMapper::toDetalleProductoDTO).collect(Collectors.toList());
+    }
 
 }
